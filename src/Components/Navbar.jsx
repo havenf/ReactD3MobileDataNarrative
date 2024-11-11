@@ -11,7 +11,7 @@ export function Navbar() {
       </Link>
       <Link to={'stuff'}>
         <div>
-            Stuff
+            Data
         </div>
       </Link>
     </nav>

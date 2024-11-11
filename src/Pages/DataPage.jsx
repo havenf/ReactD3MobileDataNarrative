@@ -2,15 +2,27 @@ import { observer } from 'mobx-react-lite';
 import * as d3 from 'd3';
 import React, { useEffect, useRef } from 'react';
 
-function StuffPage() {
+function DataPage() {
 
     const svgRef = useRef(null); // Reference to the SVG element
   
     useEffect(() => {
       // Set the dimensions and margins of the graph
-      const margin = { top: 20, right: 30, bottom: 30, left: 60 },
-        width = 460 - margin.left - margin.right,
-        height = 400 - margin.top - margin.bottom;
+      // Set up margins and base width/height
+      const margin = { top: 10, right: 60, bottom: 30, left: 60 };
+
+      // Function to update width and height based on window size
+      function getResponsiveSize() {
+      const width = (window.innerWidth * 0.80) - margin.left - margin.right;
+      const height = (window.innerHeight / 2) - margin.top - margin.bottom;
+      return { width, height };
+      }
+
+      // Call it initially to set up size
+      let { width, height } = getResponsiveSize();
+
+      // You can now use `width` and `height` for your SVG or canvas size
+
   
       // Append the svg object to the DOM element using the ref
       const svg = d3.select(svgRef.current)
@@ -64,14 +76,18 @@ function StuffPage() {
             .y1(d => y(d[1]))
           );
       });
-  
+
+      return () => {
+        d3.select(svgRef.current).selectAll('*').remove();
+      };
+
     }, []); // Empty dependency array to run only once when the component mounts
   return (
     <section>
-      Stuff Page
-      <div id="my_dataviz" ref={svgRef}></div>
+        <h2>Fossil fuel data</h2>
+        <div id="dataviz" ref={svgRef}></div>
     </section>
   );
 }
 
-export default observer(StuffPage);
+export default observer(DataPage);
