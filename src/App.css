@@ -1,0 +1,55 @@
+#root {
+  max-width: 100%;
+  padding-left: 10%;
+  overflow-x: hidden;
+}
+
+#nav {
+  height: 100%; 
+  width: 10%;
+  position: fixed;
+  z-index: 1; 
+  top: 0; 
+  left: 0;
+  background-color: #111; 
+}
+
+#nav a {
+  text-decoration: none;
+  font-size: 14pt;
+  padding: 5% 0px;
+  margin: 0px 8%;
+  display: block;
+  position: relative;
+  opacity: 0.85;
+}
+
+#nav a:hover {
+  opacity: 1;
+}
+
+#nav a::before {
+  transition: 300ms;
+  height: 5px;
+  content: "";
+  position: absolute;
+  background-color: #2e08b8;
+}
+
+#nav a::before {
+  width: 0%;
+  bottom: 15%;
+}
+
+#nav a:hover::before {
+  width: 100%;
+}
+
+@media (max-width: 980px){
+  #nav{
+    width: 30%;
+  }
+  #root{
+    padding-left: 30%;
+  }
+}
