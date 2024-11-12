@@ -8,7 +8,7 @@ function DataPage() {
 
   useEffect(() => {
     // Set the margins of the graph
-    const margin = { top: 10, right: 50, bottom: 30, left: 50 };
+    const margin = { top: 10, right: 70, bottom: 30, left: 30 };
 
     // Function to update width and height based on window size
     function getResponsiveSize() {
@@ -34,21 +34,30 @@ function DataPage() {
         .attr('transform', `translate(${margin.left},${margin.top})`);
 
       // Fetch the data
-      d3.csv('https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/5_OneCatSevNumOrdered_wide.csv').then((data) => {
-        const keys = data.columns.slice(1);
+      d3.csv('https://raw.githubusercontent.com/havenf/CSV-Datasets/refs/heads/main/US%20FF%20and%20CO2%20pp10k.csv').then((data) => {
+        // Assuming the first column is 'Year' and other columns are fuel/CO2-related
+        const keys = data.columns.slice(1); // all columns except the first one (assumed to be Year)
 
-        // X axis: scale for the 'year' data
+        // Parse the data for numbers (e.g., converting strings to numbers)
+        data.forEach(d => {
+          d.Year = +d.Year; // Ensure Year is a number
+          keys.forEach(key => {
+            d[key] = +d[key]; // Convert other columns to numbers
+          });
+        });
+
+        // X axis: scale for the 'Year' data
         const x = d3.scaleLinear()
-          .domain(d3.extent(data, d => d.year))
+          .domain(d3.extent(data, d => d.Year)) // Set the domain based on the Year column
           .range([0, width]);
 
         newSvg.append('g')
           .attr('transform', `translate(0,${height})`)
           .call(d3.axisBottom(x).ticks(5));
 
-        // Y axis: scale for the range of values
+        // Y axis: scale for the range of values (you may adjust domain based on your data range)
         const y = d3.scaleLinear()
-          .domain([-100000, 100000])
+          .domain([0, d3.max(data, d => d3.max(keys, key => d[key])) * 2.5]) // Set domain based on the max value in data
           .range([height, 0]);
 
         newSvg.append('g')
@@ -57,24 +66,61 @@ function DataPage() {
         // Color palette
         const color = d3.scaleOrdinal()
           .domain(keys)
-          .range(['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628', '#f781bf']);
+          .range(d3.schemeCategory10); // You can adjust the color scale as needed
 
         // Stack the data
         const stackedData = d3.stack()
-          .offset(d3.stackOffsetSilhouette)
           .keys(keys)(data);
+
+        // Create a tooltip
+        const Tooltip = newSvg.append('text')
+          .attr('x', 0)
+          .attr('y', 0)
+          .style('opacity', 0)
+          .style('font-size', '17px')
+          .style('pointer-events', 'none'); // Ensuring tooltip doesn't interfere with hover events
+
+        // Hover functions
+        const mouseover = function (event, d) {
+          Tooltip.style('opacity', 1);
+          d3.selectAll('.myArea')
+            .style('opacity', 0.2); // Fade out other areas
+          d3.select(this)
+            .style('stroke', 'white')
+            .style('opacity', 1); // Make the hovered area more prominent
+        };
+
+        const mousemove = function (event, d) {
+          // Get the column name from the 'key' of the current stack
+          const columnName = d.key;
+          Tooltip.text(columnName)
+            .attr('x', event.pageX + 10) // Position tooltip near the cursor
+            .attr('y', event.pageY - 10)
+            .style('stroke', 'white');
+        };
+
+        const mouseleave = function () {
+          Tooltip.style('opacity', 0);
+          d3.selectAll('.myArea')
+            .style('opacity', 1)
+            .style('stroke', 'none'); // Reset opacity and stroke
+        };
 
         // Show the areas
         newSvg.selectAll('mylayers')
           .data(stackedData)
           .enter()
           .append('path')
+          .attr('class', 'myArea')
           .style('fill', d => color(d.key))
           .attr('d', d3.area()
-            .x((d, i) => x(d.data.year))
-            .y0(d => y(d[0]))
-            .y1(d => y(d[1]))
-          );
+            .x((d, i) => x(d.data.Year)) // Use the 'Year' for x axis
+            .y0(d => y(d[0])) // Bottom of the stacked area
+            .y1(d => y(d[1])) // Top of the stacked area
+          )
+          .on('mouseover', mouseover)
+          .on('mousemove', mousemove)
+          .on('mouseleave', mouseleave);
       });
     }
 
@@ -92,7 +138,7 @@ function DataPage() {
 
   return (
     <section>
-      <h2>Fossil fuel data</h2>
+      <h2>Fossil Fuel and CO2 Data</h2>
       <div id="dataviz" ref={svgRef}></div>
     </section>
   );
