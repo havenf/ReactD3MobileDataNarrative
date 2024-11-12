@@ -9,7 +9,7 @@ export function Navbar() {
             Main
         </div>
       </Link>
-      <Link to={'stuff'}>
+      <Link to={'data'}>
         <div>
             Data
         </div>

@@ -8,12 +8,12 @@ function DataPage() {
 
   useEffect(() => {
     // Set the margins of the graph
-    const margin = { top: 10, right: 70, bottom: 30, left: 30 };
+    const margin = { top: 10, right: 100, bottom: 100, left: 20 };
 
     // Function to update width and height based on window size
     function getResponsiveSize() {
-      const width = window.innerWidth * 0.80 - margin.left - margin.right;
-      const height = window.innerHeight / 2 - margin.top - margin.bottom;
+      const width = window.innerWidth * 0.85 - margin.left - margin.right;
+      const height = window.innerHeight * 0.60 - margin.top - margin.bottom;
       return { width, height };
     }
 
@@ -77,8 +77,9 @@ function DataPage() {
           .attr('x', 0)
           .attr('y', 0)
           .style('opacity', 0)
-          .style('font-size', '17px')
-          .style('pointer-events', 'none'); // Ensuring tooltip doesn't interfere with hover events
+          .style('font-size', '12px')
+          .style('pointer-events', 'none')
+          .style('z-index', 0); // Ensuring tooltip doesn't interfere with hover events
 
         // Hover functions
         const mouseover = function (event, d) {
@@ -87,15 +88,15 @@ function DataPage() {
             .style('opacity', 0.2); // Fade out other areas
           d3.select(this)
             .style('stroke', 'white')
-            .style('opacity', 1); // Make the hovered area more prominent
+            .style('opacity', 100); // Make the hovered area more prominent
         };
 
         const mousemove = function (event, d) {
           // Get the column name from the 'key' of the current stack
           const columnName = d.key;
           Tooltip.text(columnName)
-            .attr('x', event.pageX + 10) // Position tooltip near the cursor
-            .attr('y', event.pageY - 10)
+            .attr('x', event.pageX - 200) // Position tooltip near the cursor
+            .attr('y', event.pageY - 30)
             .style('stroke', 'white');
         };
 
