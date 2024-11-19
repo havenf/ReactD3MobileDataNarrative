@@ -3,7 +3,9 @@ import * as d3 from 'd3';
 import React, { useEffect, useRef, useState } from 'react';
 
 function DataPage() {
-  const svgRef = useRef(null); // Reference to the SVG element
+  const svgRef = useRef(null); // Reference to the SVG element for the first graph
+  const svgRef2 = useRef(null); // Reference to the SVG element for the second graph
+  const svgRef3 = useRef(null); // Reference to the SVG element for the third graph
   const [size, setSize] = useState({ width: 0, height: 0 }); // State to store SVG dimensions
 
   useEffect(() => {
@@ -17,24 +19,24 @@ function DataPage() {
       return { width, height };
     }
 
-    // Function to create/update the chart
-    function updateChart() {
+    // Function to fetch data and update the chart
+    function updateChart(svgElement, datasetUrl) {
       const { width, height } = getResponsiveSize();
       setSize({ width, height });
 
       // Select SVG element and remove old content
-      const svg = d3.select(svgRef.current).selectAll('*').remove();
+      const svg = d3.select(svgElement).selectAll('*').remove();
 
       // Create new SVG with updated dimensions
-      const newSvg = d3.select(svgRef.current)
+      const newSvg = d3.select(svgElement)
         .append('svg')
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom)
         .append('g')
         .attr('transform', `translate(${margin.left},${margin.top})`);
 
-      // Fetch the data
-      d3.csv('https://raw.githubusercontent.com/havenf/CSV-Datasets/refs/heads/main/US%20FF%20and%20CO2%20pp10k.csv').then((data) => {
+      // Fetch the dataset for the current graph
+      d3.csv(datasetUrl).then((data) => {
         // Assuming the first column is 'Year' and other columns are fuel/CO2-related
         const keys = data.columns.slice(1); // all columns except the first one (assumed to be Year)
 
@@ -72,14 +74,15 @@ function DataPage() {
         const stackedData = d3.stack()
           .keys(keys)(data);
 
-        // Create a tooltip
-        const Tooltip = newSvg.append('text')
+        // Create a tooltip for each graph
+        const Tooltip = d3.select(svgElement)
+          .append('text')
           .attr('x', 0)
           .attr('y', 0)
           .style('opacity', 0)
           .style('font-size', '12px')
           .style('pointer-events', 'none')
-          .style('z-index', 0); // Ensuring tooltip doesn't interfere with hover events
+          .style('z-index', 10); // Make sure tooltip is above graph elements
 
         // Hover functions
         const mouseover = function (event, d) {
@@ -88,16 +91,18 @@ function DataPage() {
             .style('opacity', 0.2); // Fade out other areas
           d3.select(this)
             .style('stroke', 'white')
-            .style('opacity', 100); // Make the hovered area more prominent
+            .style('opacity', 1); // Make the hovered area more prominent
         };
 
         const mousemove = function (event, d) {
           // Get the column name from the 'key' of the current stack
           const columnName = d.key;
+          const graphBBox = newSvg.node().getBoundingClientRect(); // Get bounding box of the SVG
+
+          // Position tooltip near the cursor with offset based on the graph's position
           Tooltip.text(columnName)
-            .attr('x', event.pageX - 200) // Position tooltip near the cursor
-            .attr('y', event.pageY - 30)
-            .style('stroke', 'white');
+            .attr('x', event.pageX - graphBBox.left - 200) // Position tooltip near the cursor relative to the graph
+            .attr('y', event.pageY - graphBBox.top - 30);
         };
 
         const mouseleave = function () {
@@ -125,15 +130,32 @@ function DataPage() {
       });
     }
 
-    // Initial chart update
-    updateChart();
+    // Dataset URLs for each graph
+    const datasetUrls = [
+      'https://raw.githubusercontent.com/havenf/CSV-Datasets/refs/heads/main/US%20FF%20and%20CO2%20pp10k.csv', // First graph
+      'https://raw.githubusercontent.com/havenf/CSV-Datasets/refs/heads/main/Vostok%20Ice%20Core%20Data%20-%20Sheet.csv', // Second graph
+      'https://raw.githubusercontent.com/havenf/CSV-Datasets/refs/heads/main/US%20FF%20and%20CO2%20pp10k.csv' // Third graph
+    ];    
+
+    // Initial chart update for all three graphs with different datasets
+    updateChart(svgRef.current, datasetUrls[0]); // For the first graph
+    updateChart(svgRef2.current, datasetUrls[1]); // For the second graph
+    updateChart(svgRef3.current, datasetUrls[2]); // For the third graph
 
     // Resize event listener
-    window.addEventListener('resize', updateChart);
+    window.addEventListener('resize', () => {
+      updateChart(svgRef.current, datasetUrls[0]);
+      updateChart(svgRef2.current, datasetUrls[1]);
+      updateChart(svgRef3.current, datasetUrls[2]); // Resize the third graph too
+    });
 
     // Cleanup on unmount
     return () => {
-      window.removeEventListener('resize', updateChart);
+      window.removeEventListener('resize', () => {
+        updateChart(svgRef.current, datasetUrls[0]);
+        updateChart(svgRef2.current, datasetUrls[1]);
+        updateChart(svgRef3.current, datasetUrls[2]);
+      });
     };
   }, []); // Empty dependency array to run only once when the component mounts
 
@@ -141,6 +163,8 @@ function DataPage() {
     <section>
       <h2>Fossil Fuel and CO2 Data</h2>
       <div id="dataviz" ref={svgRef}></div>
+      <div id="dataviz2" ref={svgRef2}></div>
+      <div id="dataviz3" ref={svgRef3}></div> {/* Added a third div for the third graph */}
     </section>
   );
 }

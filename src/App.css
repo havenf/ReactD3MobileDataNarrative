@@ -22,6 +22,7 @@
   display: block;
   position: relative;
   opacity: 0.85;
+  border-radius: 0.2em;
 }
 
 #nav a:hover {
@@ -33,15 +34,13 @@
   height: 5px;
   content: "";
   position: absolute;
-  background-color: #2e08b8;
-}
-
-#nav a::before {
+  background-color: #8886ff;
   width: 0%;
-  bottom: 15%;
+  bottom: 1%;
+  border-radius: 5em;
 }
 
-#nav a:hover::before {
+#nav a:hover::before{
   width: 100%;
 }
 

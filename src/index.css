@@ -15,11 +15,11 @@
 
 a {
   font-weight: 500;
-  color: #8086ff;
+  color: #8886ff;
   text-decoration: inherit;
 }
 a:hover {
-  color: #767cf0;
+  color: #a4a6ff;
 }
 
 body {
@@ -50,6 +50,15 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+section{
+  margin: 5% 5%;
+}
+
+p {
+  margin: 3%;
+  word-spacing: 0.1vw;
+  font-size: 13pt;
+}
 
 @media (prefers-color-scheme: light) {
   :root {

@@ -1,19 +1,41 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 export function Navbar() {
+
+  // hooks for checking current url and setting current active url
+  const location = useLocation();
+  const [activeLink, setActiveLink] = useState("");
+
+  useEffect(() => {
+    // checks current url, utilizes useState to set active link
+    switch(location.pathname)
+    {
+      case "/":
+        setActiveLink("main");
+        break;
+      case "/data":
+        setActiveLink("data");
+        break;
+    }
+  }, [location.pathname]); // runs useEffect each time location.pathname changes 
+
   return (
     <nav id="nav">
-      <Link to={''}>
-        <div>
-            Main
-        </div>
+      <Link
+        id="mainNavLink"
+        to="/"
+        style={{backgroundColor: activeLink === "main" ? "#222" : ""}}
+      >
+        <div>Main</div>
       </Link>
-      <Link to={'data'}>
-        <div>
-            Data
-        </div>
+      <Link
+        id="dataNavLink"
+        to="/data"
+        style={{backgroundColor: activeLink === "data" ? "#222" : ""}}
+      >
+        <div>Data</div>
       </Link>
     </nav>
-  )
+  );
 }
