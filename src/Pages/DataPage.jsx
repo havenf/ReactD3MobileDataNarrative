@@ -56,7 +56,7 @@ function DataPage() {
 
         // Y axis: scale for the range of values
         const y = d3.scaleLinear()
-          .domain([0, d3.max(data, d => d3.max(keys, key => d[key])) * 2.35])
+          .domain([0, d3.max(data, d => d3.max(keys, key => d[key])) * 2.3])
           .range([height, 0]);
 
         newSvg.append('g')
@@ -82,7 +82,7 @@ function DataPage() {
           .style('z-index', 10);
 
         // Hover functions
-        const mouseover = function (event, d) {
+        const mouseover = function () {
           Tooltip.style('opacity', 1);
           d3.selectAll('.myArea')
             .style('opacity', 0.2);
@@ -125,7 +125,7 @@ function DataPage() {
       });
     }
 
-    // Function to update the second graph (radial chart)
+   // Function to update the second graph (radial chart)
     function updateSecondGraph(svgElement, datasetUrl) {
       const { width, height } = getResponsiveSize();
       setSize({ width, height });
@@ -151,24 +151,62 @@ function DataPage() {
 
         const y = d3.scaleRadial()
           .range([30, Math.min(width, height) / 2])
-          .domain([0, 600]); // You can adjust this based on your data range
+          .domain([0, 600]); // Adjust based on your data range
 
-        // Add the bars (arc paths)
+        // Create Tooltip
+        const Tooltip = d3.select(svgElement)
+          .append('text')
+          .attr('x', 0)
+          .attr('y', 0)
+          .style('opacity', 0)
+          .style('font-size', '12px')
+          .style('pointer-events', 'none')
+          .style('z-index', 10);
+
+        // Hover functions
+        const mouseover = function () {
+          Tooltip.style('opacity', 1);
+          d3.selectAll('.radialBar')
+            .style('opacity', 0.2); // Dim all other bars
+          d3.select(this)
+            .style('stroke', 'white')
+            .style('opacity', 1); // Highlight the hovered bar
+        };
+
+        const mousemove = function (event, d) {
+          const graphBBox = newSvg.node().getBoundingClientRect();
+          Tooltip.text(`${d.Year}: ${'co2 ' + d['Rough Vostok Ice core Data: CO2 Athmosphereic levels in parts per million (1 x 10^-6) over thousands of years (https://tos.org/oceanography/assets/docs/17-4_alley.pdf)'] + ' parts per million (1 x 10^-6)'}`)
+            .attr('x', event.pageX - graphBBox.left - 200)
+            .attr('y', event.pageY - graphBBox.top - 30);
+        };
+
+        const mouseleave = function () {
+          Tooltip.style('opacity', 0);
+          d3.selectAll('.radialBar')
+            .style('opacity', 1)
+            .style('stroke', 'none'); // Reset style
+        };
+
+        // Add the bars (arc paths) and apply the mouseover effect
         newSvg.append("g")
           .selectAll("path")
           .data(data)
           .enter()
           .append("path")
+          .attr("class", "radialBar") // Add class for reference
           .attr("fill", "#69b3a2")
           .attr("d", d3.arc()
-            .innerRadius(90)
+            .innerRadius(30)
             .outerRadius(d => y(d['Rough Vostok Ice core Data: CO2 Athmosphereic levels in parts per million (1 x 10^-6) over thousands of years (https://tos.org/oceanography/assets/docs/17-4_alley.pdf)']))
             .startAngle(d => x(d.Year))
             .endAngle(d => x(d.Year) + x.bandwidth())
             .padAngle(0.01)
-            .padRadius(90));
+            .padRadius(90))
+          .on('mouseover', mouseover)
+          .on('mousemove', mousemove)
+          .on('mouseleave', mouseleave);
 
-        // Add the labels
+        // Add the labels (Year labels for each bar)
         newSvg.append("g")
           .selectAll("g")
           .data(data)
@@ -182,9 +220,9 @@ function DataPage() {
           .style("font-size", "11px")
           .style("fill", "#ffffff")
           .attr("alignment-baseline", "middle");
-          
       });
     }
+
   
     // Dataset URLs
     const datasetUrls = [
