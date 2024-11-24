@@ -18,6 +18,14 @@ function HomePage() {
           This data platform makes no representations or warranties regarding the accuracy, completeness, or reliability of 
           the data provided, and any conclusions drawn from this information should be informal.
         </p>
+        <h2>What is paleoclimatology?</h2>
+        <p>
+        Throughout Earth's history, there have been times when atmospheric carbon dioxide levels were naturally high, leading 
+        to warmer global temperatures. However, the current rise in carbon dioxide emissions, primarily due to the burning 
+        of fossil fuels and other human activities, is unprecedented. This increase is driving rapid changes in the climate 
+        system. As a result, the pace of climate change has accelerated since the Industrial Revolution, outpacing any period 
+        in the past 65 million years.
+        </p>
         <h2>Vostok Ice Core Data</h2>
         <p>
           The Vostok Ice Core data is a series of records taken from ice core samples. The ice core

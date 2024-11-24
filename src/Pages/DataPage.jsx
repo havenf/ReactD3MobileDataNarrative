@@ -5,22 +5,21 @@ import React, { useEffect, useRef, useState } from 'react';
 function DataPage() {
   const svgRef = useRef(null); // Reference to the SVG element for the first graph
   const svgRef2 = useRef(null); // Reference to the SVG element for the second graph
-  const svgRef3 = useRef(null); // Reference to the SVG element for the third graph
   const [size, setSize] = useState({ width: 0, height: 0 }); // State to store SVG dimensions
 
   useEffect(() => {
     // Set the margins of the graph
-    const margin = { top: 10, right: 100, bottom: 100, left: 20 };
-
+    const margin = { top: 10, right: 100, bottom: 100, left: 50 };
+  
     // Function to update width and height based on window size
     function getResponsiveSize() {
       const width = window.innerWidth * 0.85 - margin.left - margin.right;
       const height = window.innerHeight * 0.60 - margin.top - margin.bottom;
       return { width, height };
     }
-
-    // Function to fetch data and update the chart
-    function updateChart(svgElement, datasetUrl) {
+  
+    // Function to update the first graph (stacked area chart)
+    function updateFirstGraph(svgElement, datasetUrl) {
       const { width, height } = getResponsiveSize();
       setSize({ width, height });
 
@@ -35,14 +34,12 @@ function DataPage() {
         .append('g')
         .attr('transform', `translate(${margin.left},${margin.top})`);
 
-      // Fetch the dataset for the current graph
+      // Fetch the dataset for the stacked area chart
       d3.csv(datasetUrl).then((data) => {
-        // Assuming the first column is 'Year' and other columns are fuel/CO2-related
-        const keys = data.columns.slice(1); // all columns except the first one (assumed to be Year)
+        const keys = data.columns.slice(1); // Assuming first column is 'Year'
 
-        // Parse the data for numbers (e.g., converting strings to numbers)
         data.forEach(d => {
-          d.Year = +d.Year; // Ensure Year is a number
+          d.Year = +d.Year;
           keys.forEach(key => {
             d[key] = +d[key]; // Convert other columns to numbers
           });
@@ -50,16 +47,16 @@ function DataPage() {
 
         // X axis: scale for the 'Year' data
         const x = d3.scaleLinear()
-          .domain(d3.extent(data, d => d.Year)) // Set the domain based on the Year column
+          .domain(d3.extent(data, d => d.Year))
           .range([0, width]);
 
         newSvg.append('g')
           .attr('transform', `translate(0,${height})`)
-          .call(d3.axisBottom(x).ticks(5));
+          .call(d3.axisBottom(x).ticks(6));
 
-        // Y axis: scale for the range of values (you may adjust domain based on your data range)
+        // Y axis: scale for the range of values
         const y = d3.scaleLinear()
-          .domain([0, d3.max(data, d => d3.max(keys, key => d[key])) * 2.5]) // Set domain based on the max value in data
+          .domain([0, d3.max(data, d => d3.max(keys, key => d[key])) * 2.35])
           .range([height, 0]);
 
         newSvg.append('g')
@@ -68,13 +65,13 @@ function DataPage() {
         // Color palette
         const color = d3.scaleOrdinal()
           .domain(keys)
-          .range(d3.schemeCategory10); // You can adjust the color scale as needed
+          .range(d3.schemeCategory10);
 
         // Stack the data
         const stackedData = d3.stack()
           .keys(keys)(data);
 
-        // Create a tooltip for each graph
+        // Create a tooltip
         const Tooltip = d3.select(svgElement)
           .append('text')
           .attr('x', 0)
@@ -82,26 +79,24 @@ function DataPage() {
           .style('opacity', 0)
           .style('font-size', '12px')
           .style('pointer-events', 'none')
-          .style('z-index', 10); // Make sure tooltip is above graph elements
+          .style('z-index', 10);
 
         // Hover functions
         const mouseover = function (event, d) {
           Tooltip.style('opacity', 1);
           d3.selectAll('.myArea')
-            .style('opacity', 0.2); // Fade out other areas
+            .style('opacity', 0.2);
           d3.select(this)
             .style('stroke', 'white')
-            .style('opacity', 1); // Make the hovered area more prominent
+            .style('opacity', 1);
         };
 
         const mousemove = function (event, d) {
-          // Get the column name from the 'key' of the current stack
           const columnName = d.key;
-          const graphBBox = newSvg.node().getBoundingClientRect(); // Get bounding box of the SVG
+          const graphBBox = newSvg.node().getBoundingClientRect();
 
-          // Position tooltip near the cursor with offset based on the graph's position
           Tooltip.text(columnName)
-            .attr('x', event.pageX - graphBBox.left - 200) // Position tooltip near the cursor relative to the graph
+            .attr('x', event.pageX - graphBBox.left - 200)
             .attr('y', event.pageY - graphBBox.top - 30);
         };
 
@@ -109,7 +104,7 @@ function DataPage() {
           Tooltip.style('opacity', 0);
           d3.selectAll('.myArea')
             .style('opacity', 1)
-            .style('stroke', 'none'); // Reset opacity and stroke
+            .style('stroke', 'none');
         };
 
         // Show the areas
@@ -120,9 +115,9 @@ function DataPage() {
           .attr('class', 'myArea')
           .style('fill', d => color(d.key))
           .attr('d', d3.area()
-            .x((d, i) => x(d.data.Year)) // Use the 'Year' for x axis
-            .y0(d => y(d[0])) // Bottom of the stacked area
-            .y1(d => y(d[1])) // Top of the stacked area
+            .x((d, i) => x(d.data.Year))
+            .y0(d => y(d[0]))
+            .y1(d => y(d[1]))
           )
           .on('mouseover', mouseover)
           .on('mousemove', mousemove)
@@ -130,41 +125,97 @@ function DataPage() {
       });
     }
 
-    // Dataset URLs for each graph
+    // Function to update the second graph (radial chart)
+    function updateSecondGraph(svgElement, datasetUrl) {
+      const { width, height } = getResponsiveSize();
+      setSize({ width, height });
+
+      // Select SVG element and remove old content
+      const svg = d3.select(svgElement).selectAll('*').remove();
+
+      // Create new SVG with updated dimensions
+      const newSvg = d3.select(svgElement)
+        .append('svg')
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', height + margin.top + margin.bottom)
+        .append('g')
+        .attr('transform', `translate(${width / 2 + margin.left},${height / 2 + margin.top})`);
+
+      // Fetch the dataset for the radial chart
+      d3.csv(datasetUrl).then((data) => {
+        // Scales for radial chart
+        const x = d3.scaleBand()
+          .range([0, 2 * Math.PI])
+          .align(0)
+          .domain(data.map(d => d.Year));
+
+        const y = d3.scaleRadial()
+          .range([30, Math.min(width, height) / 2])
+          .domain([0, 600]); // You can adjust this based on your data range
+
+        // Add the bars (arc paths)
+        newSvg.append("g")
+          .selectAll("path")
+          .data(data)
+          .enter()
+          .append("path")
+          .attr("fill", "#69b3a2")
+          .attr("d", d3.arc()
+            .innerRadius(90)
+            .outerRadius(d => y(d['Rough Vostok Ice core Data: CO2 Athmosphereic levels in parts per million (1 x 10^-6) over thousands of years (https://tos.org/oceanography/assets/docs/17-4_alley.pdf)']))
+            .startAngle(d => x(d.Year))
+            .endAngle(d => x(d.Year) + x.bandwidth())
+            .padAngle(0.01)
+            .padRadius(90));
+
+        // Add the labels
+        newSvg.append("g")
+          .selectAll("g")
+          .data(data)
+          .enter()
+          .append("g")
+          .attr("text-anchor", d => (x(d.Year) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start")
+          .attr("transform", d => `rotate(${(x(d.Year) + x.bandwidth() / 2) * 180 / Math.PI - 90})translate(${y(d['Rough Vostok Ice core Data: CO2 Athmosphereic levels in parts per million (1 x 10^-6) over thousands of years (https://tos.org/oceanography/assets/docs/17-4_alley.pdf)']) + 5},0)`)
+        .append("text")
+          .text(d => d.Year)
+          .attr("transform", d => (x(d.Year) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "rotate(180)" : "rotate(0)")
+          .style("font-size", "11px")
+          .style("fill", "#ffffff")
+          .attr("alignment-baseline", "middle");
+          
+      });
+    }
+  
+    // Dataset URLs
     const datasetUrls = [
-      'https://raw.githubusercontent.com/havenf/CSV-Datasets/refs/heads/main/US%20FF%20and%20CO2%20pp10k.csv', // First graph
-      'https://raw.githubusercontent.com/havenf/CSV-Datasets/refs/heads/main/Vostok%20Ice%20Core%20Data%20-%20Sheet.csv', // Second graph
-      'https://raw.githubusercontent.com/havenf/CSV-Datasets/refs/heads/main/US%20FF%20and%20CO2%20pp10k.csv' // Third graph
-    ];    
-
-    // Initial chart update for all three graphs with different datasets
-    updateChart(svgRef.current, datasetUrls[0]); // For the first graph
-    updateChart(svgRef2.current, datasetUrls[1]); // For the second graph
-    updateChart(svgRef3.current, datasetUrls[2]); // For the third graph
-
+      'https://raw.githubusercontent.com/havenf/CSV-Datasets/refs/heads/main/US%20FF%20and%20CO2%20pp10k.csv', // For the first graph (stacked area)
+      'https://raw.githubusercontent.com/havenf/CSV-Datasets/refs/heads/main/Vostok%20Ice%20Core%20Data%20-%20Sheet.csv' // For the second graph (radial chart)
+    ];
+  
+    // Initial chart update for both graphs
+    updateFirstGraph(svgRef.current, datasetUrls[0]); // For the first graph (stacked area)
+    updateSecondGraph(svgRef2.current, datasetUrls[1]); // For the second graph (radial chart)
+  
     // Resize event listener
     window.addEventListener('resize', () => {
-      updateChart(svgRef.current, datasetUrls[0]);
-      updateChart(svgRef2.current, datasetUrls[1]);
-      updateChart(svgRef3.current, datasetUrls[2]); // Resize the third graph too
+      updateFirstGraph(svgRef.current, datasetUrls[0]);
+      updateSecondGraph(svgRef2.current, datasetUrls[1]); // Resize the second graph
     });
-
+  
     // Cleanup on unmount
     return () => {
       window.removeEventListener('resize', () => {
-        updateChart(svgRef.current, datasetUrls[0]);
-        updateChart(svgRef2.current, datasetUrls[1]);
-        updateChart(svgRef3.current, datasetUrls[2]);
+        updateFirstGraph(svgRef.current, datasetUrls[0]);
+        updateSecondGraph(svgRef2.current, datasetUrls[1]);
       });
     };
   }, []); // Empty dependency array to run only once when the component mounts
-
+  
   return (
     <section>
       <h2>Fossil Fuel and CO2 Data</h2>
       <div id="dataviz" ref={svgRef}></div>
       <div id="dataviz2" ref={svgRef2}></div>
-      <div id="dataviz3" ref={svgRef3}></div> {/* Added a third div for the third graph */}
     </section>
   );
 }
