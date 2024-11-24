@@ -150,7 +150,7 @@ function DataPage() {
           .domain(data.map(d => d.Year));
 
         const y = d3.scaleRadial()
-          .range([30, Math.min(width, height) / 2])
+          .range([window.innerWidth / 1000, Math.min(width, height) / 2])
           .domain([0, 600]); // Adjust based on your data range
 
         // Create Tooltip
@@ -196,12 +196,12 @@ function DataPage() {
           .attr("class", "radialBar") // Add class for reference
           .attr("fill", "#69b3a2")
           .attr("d", d3.arc()
-            .innerRadius(30)
+            .innerRadius(20)
             .outerRadius(d => y(d['Rough Vostok Ice core Data: CO2 Athmosphereic levels in parts per million (1 x 10^-6) over thousands of years (https://tos.org/oceanography/assets/docs/17-4_alley.pdf)']))
             .startAngle(d => x(d.Year))
             .endAngle(d => x(d.Year) + x.bandwidth())
             .padAngle(0.01)
-            .padRadius(90))
+            .padRadius(125))
           .on('mouseover', mouseover)
           .on('mousemove', mousemove)
           .on('mouseleave', mouseleave);
@@ -217,7 +217,7 @@ function DataPage() {
         .append("text")
           .text(d => d.Year)
           .attr("transform", d => (x(d.Year) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "rotate(180)" : "rotate(0)")
-          .style("font-size", "11px")
+          .style("font-size", "12px")
           .style("fill", "#ffffff")
           .attr("alignment-baseline", "middle");
       });
