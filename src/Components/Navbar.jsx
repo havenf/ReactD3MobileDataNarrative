@@ -17,6 +17,9 @@ export function Navbar() {
       case "/data":
         setActiveLink("data");
         break;
+      case "/sources":
+        setActiveLink("sources");
+        break;
     }
   }, [location.pathname]); // runs useEffect each time location.pathname changes 
 
@@ -35,6 +38,13 @@ export function Navbar() {
         style={{backgroundColor: activeLink === "data" ? "#222" : ""}}
       >
         <div>Data</div>
+      </Link>
+      <Link
+        id="sourcesNavLink"
+        to="/sources"
+        style={{backgroundColor: activeLink === "sources" ? "#222" : ""}}
+      >
+        <div>Sources</div>
       </Link>
     </nav>
   );

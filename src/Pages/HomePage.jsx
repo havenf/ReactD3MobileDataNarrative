@@ -53,7 +53,7 @@ function HomePage() {
           The data reports that the levels are highest ever recorded in history based on the ice core 
           data. Predicting future outcomes with aforementioned data is entirely hypothetical. <br /><br />
         </p>
-        <Link to={'data'}><button>See Data</button></Link>
+        <Link to={'/data'}><button>See Data</button></Link>
     </section>
   )
 }

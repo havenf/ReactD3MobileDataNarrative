@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import * as d3 from 'd3';
 import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function DataPage() {
   const svgRef = useRef(null); // Reference to the SVG element for the first graph
@@ -11,14 +12,14 @@ function DataPage() {
     // Set the margins of the graph
     const margin = { top: 10, right: 100, bottom: 100, left: 50 };
   
-    // Function to update width and height based on window size
+    // update width and height based on window size
     function getResponsiveSize() {
       const width = window.innerWidth * 0.85 - margin.left - margin.right;
       const height = window.innerHeight * 0.60 - margin.top - margin.bottom;
       return { width, height };
     }
   
-    // Function to update the first graph (stacked area chart)
+    // update the first graph (stacked area chart)
     function updateFirstGraph(svgElement, datasetUrl) {
       const { width, height } = getResponsiveSize();
       setSize({ width, height });
@@ -26,7 +27,7 @@ function DataPage() {
       // Select SVG element and remove old content
       const svg = d3.select(svgElement).selectAll('*').remove();
 
-      // Create new SVG with updated dimensions
+      // SVG with updated dimensions
       const newSvg = d3.select(svgElement)
         .append('svg')
         .attr('width', width + margin.left + margin.right)
@@ -255,6 +256,7 @@ function DataPage() {
       <div id="dataviz" ref={svgRef}></div>
       <h2>Vostok Ice Core Data</h2>
       <div id="dataviz2" ref={svgRef2}></div>
+      <Link to={'/sources'}><button>See Sources</button></Link>
     </section>
   );
 }
