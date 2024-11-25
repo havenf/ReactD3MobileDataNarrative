@@ -18,7 +18,7 @@
   text-decoration: none;
   font-size: 14pt;
   padding: 5% 0px;
-  margin: 0px 8%;
+  margin: 10% 8%;
   display: block;
   position: relative;
   opacity: 0.85;
@@ -46,9 +46,9 @@
 
 @media (max-width: 980px){
   #nav{
-    width: 30%;
+    width: 25%;
   }
   #root{
-    padding-left: 30%;
+    padding-left: 25%;
   }
 }

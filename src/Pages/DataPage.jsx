@@ -56,7 +56,7 @@ function DataPage() {
 
         // Y axis: scale for the range of values
         const y = d3.scaleLinear()
-          .domain([0, d3.max(data, d => d3.max(keys, key => d[key])) * 2.3])
+          .domain([0, d3.max(data, d => d3.max(keys, key => d[key])) * 2.35])
           .range([height, 0]);
 
         newSvg.append('g')
@@ -253,6 +253,7 @@ function DataPage() {
     <section>
       <h2>Fossil Fuel and CO2 Data</h2>
       <div id="dataviz" ref={svgRef}></div>
+      <h2>Vostok Ice Core Data</h2>
       <div id="dataviz2" ref={svgRef2}></div>
     </section>
   );
