@@ -252,14 +252,14 @@ function DataPage() {
   
   return (
     <section className='container mx-0 px-0'>
-      <h2>Fossil Fuel and CO2 Data</h2>
+      <h2 className='ms-4'>Fossil Fuel and CO2 Data</h2>
       <div id="dataviz" ref={svgRef}></div>
       <div className='row d-flex justify-content-end'>
         <p className='col-10 pt-5'>
           Lorem ipsum this is what the data above describes and so on.
         </p>
       </div>
-      <h2>Vostok Ice Core Data</h2>
+      <h2 className='ms-4'>Vostok Ice Core Data</h2>
       <div id="dataviz2" ref={svgRef2}></div>
       <div className='row d-flex justify-content-end'>
         <p className='col-10 pt-5'>

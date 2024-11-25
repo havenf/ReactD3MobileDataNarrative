@@ -8,7 +8,7 @@ export function Navbar() {
   const [activeLink, setActiveLink] = useState("");
 
   useEffect(() => {
-    // checks current url, utilizes useState to set active link
+    // checks current url, utilizes useState to set active link styles
     switch(location.pathname)
     {
       case "/":

@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite";
 function SourcesPage(){
     return (
         <section>
-            <h2 className="row py-1">Links</h2>
+            <h2 className="row py-1 mx-0 px-0">Links</h2>
             <a target="_blank" href="https://ourworldindata.org/fossil-fuels"><h3>Our World In Data</h3></a>
             <a target="_blank" href="https://www.statista.com/statistics/1091926/atmospheric-concentration-of-co2-historic/"><h3>Statista</h3></a>
             <a target="_blank" href="https://www.eia.gov/energyexplained/oil-and-petroleum-products/imports-and-exports.php"><h3>Energy Information Administration</h3></a>
