@@ -133,6 +133,11 @@
     width: 100%;
   }
   
+  #fa-icon-home{
+    height: 25vh;
+    margin: 3% 3%;
+    border-right: #8886ff solid 1px;
+  }
   
   /*MEDIA QUERIES*/
   

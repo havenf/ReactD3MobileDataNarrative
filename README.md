@@ -4,4 +4,4 @@
 - Clone
 - run "npm i" command
 - run "npm run dev" command
-- click on terminal link i.e "localhost:5746"
+- click link generated in terminal i.e "localhost:5746"

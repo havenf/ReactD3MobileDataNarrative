@@ -10,11 +10,11 @@ function DataPage() {
 
   useEffect(() => {
     // Set the margins of the graph
-    const margin = { top: 10, right: 100, bottom: 100, left: 50 };
+    const margin = { top: 10, right: 100, bottom: 100, left: 35 };
   
     // update width and height based on window size
     function getResponsiveSize() {
-      const width = window.innerWidth * 0.85 - margin.left - margin.right;
+      const width = window.innerWidth * 0.88 - margin.left - margin.right;
       const height = window.innerHeight * 0.60 - margin.top - margin.bottom;
       return { width, height };
     }
@@ -79,6 +79,8 @@ function DataPage() {
           .attr('y', 0)
           .style('opacity', 0)
           .style('font-size', '12px')
+          .style('color', '#8886ff')
+          .style('border-bottom', '#8886ff solid 1px')
           .style('pointer-events', 'none')
           .style('z-index', 10);
 
@@ -161,6 +163,8 @@ function DataPage() {
           .attr('y', 0)
           .style('opacity', 0)
           .style('font-size', '12px')
+          .style('color', '#8886ff')
+          .style('border-bottom', '#8886ff solid 1px')
           .style('pointer-events', 'none')
           .style('z-index', 10);
 
@@ -255,15 +259,25 @@ function DataPage() {
       <h2 className='ms-4'>Fossil Fuel and CO2 Data</h2>
       <div id="dataviz" ref={svgRef}></div>
       <div className='row d-flex justify-content-end'>
-        <p className='col-10 pt-5'>
-          Lorem ipsum this is what the data above describes and so on.
+        <p className='col-11 pt-5'>
+          The data suggests a very strong correlation between human endeavors with fossil fuels and increase of
+          atmospheric carbon dioxide levels. Many aspects of our infrastructure rely on these types of fuels. Our 
+          current driving force on the potential disruption of earth's naturally cyclic carbon dioxide levels is brought
+          on by ecnomic forces meant to maintain industrial infrastructure as it relies on fossil fuel. Without these fuels 
+          burning, thousands of jobs cease to exist, agriculture no longer harvests, truckers stop transporting goods, 
+          vehicles do not drive to work or school, and factories stop producing. Due to this reliance, there may also be a 
+          strong correlation between high prices of goods and service caused by price per barrel of oil (~42 gallons / barrel).
         </p>
       </div>
       <h2 className='ms-4'>Vostok Ice Core Data</h2>
       <div id="dataviz2" ref={svgRef2}></div>
       <div className='row d-flex justify-content-end'>
-        <p className='col-10 pt-5'>
-          Lorem ipsum this is what the data above describes and so on.
+        <p className='col-11 pt-5'>
+          The data in this visualization are approximate estimates to the actual recorded levels. Generally, a pattern can be drawn out
+          that involves large abrupt spikes in carbon dioxide every one-hundred thousand years with gradual decrese over the same
+          amount of time. Some anomalous data exists in the ice such as ash from volcanic events that disrupted earth's normal
+          atmospheric composition. The conclusion that our emissions are the cause of the current higher than average levels could be true.
+          An absolute conclusion of what this means for the future is unknown. 
         </p>
       </div>
       <Link to={'/sources'}><button>See Sources</button></Link>
