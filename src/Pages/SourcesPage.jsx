@@ -12,6 +12,7 @@ function SourcesPage(){
             <a target="_blank" href="https://www.climateimpact.com/services-projects/carbon-credits-explained-what-they-are-and-how-they-work/#:~:text=Carbon%20credits%20are%20generated%20by,2e)%20in%20the%20atmosphere."><h3>Climate Impact Partners</h3></a>
             <a target="_blank" href="https://www.investopedia.com/inflation-reduction-act-of-2022-6362263"><h3>Investopedia</h3></a>
             <a target="_blank" href="https://grahamhancock.com/youngm2/"><h3>Graham Hancock: YDIH</h3></a>
+            <a target="_blank" href="https://mahb.stanford.edu/library-item/fossil-fuels-run/"><h3>MAHB: Stanford University</h3></a>
         </section>
     )
 }

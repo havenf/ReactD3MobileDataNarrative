@@ -211,7 +211,7 @@ function DataPage() {
             .startAngle(d => x(d.Year))
             .endAngle(d => x(d.Year) + x.bandwidth())
             .padAngle(0.01)
-            .padRadius(20))
+            .padRadius(70))
           .on('mouseover', mouseover)
           .on('mousemove', mousemove)
           .on('mouseleave', mouseleave);
@@ -237,7 +237,8 @@ function DataPage() {
     // Dataset URLs
     const datasetUrls = [
       'https://raw.githubusercontent.com/havenf/CSV-Datasets/refs/heads/main/US%20FF%20and%20CO2%20pp10k.csv', // For the first graph (stacked area)
-      'https://raw.githubusercontent.com/havenf/CSV-Datasets/refs/heads/main/Vostok%20Ice%20Core%20Data%20-%20Sheet.csv' // For the second graph (radial chart)
+      'https://raw.githubusercontent.com/havenf/CSV-Datasets/refs/heads/main/Vostok%20Ice%20Core%20Data%20-%20Sheet.csv', // For the second graph (radial chart)
+      'https://raw.githubusercontent.com/havenf/CSV-Datasets/refs/heads/main/Energy%20Consumption%20Data.csv'
     ];
 
 
@@ -245,6 +246,7 @@ function DataPage() {
     // Initial chart update for both graphs
     updateFirstGraph(svgRef.current, datasetUrls[0]); // For the first graph (stacked area)
     updateSecondGraph(svgRef2.current, datasetUrls[1]); // For the second graph (radial chart)
+
   
     // Resize event listener
     window.addEventListener('resize', () => {
@@ -262,7 +264,7 @@ function DataPage() {
   }, []); // Empty dependency array to run only once when the component mounts
   
   return (
-    <section className='container mx-0 px-0'>
+    <section className='container-lg mx-0 px-0'>
       <h2 className='ms-4'>Fossil Fuel and CO2 Data</h2>
       <div id="dataviz" ref={svgRef}></div>
       <div className='row d-flex justify-content-end'>
@@ -285,6 +287,24 @@ function DataPage() {
           amount of time. Some anomalous data exists in the ice such as ash from volcanic events that disrupted earth's normal
           atmospheric composition. The conclusion that our emissions are the cause of the current higher than average levels could be true.
           An absolute conclusion of what this means for the future is unknown. 
+        </p>
+      </div>
+      <h2 className='ms-4'>Basic Economics Regarding Energy Use</h2>
+      <div className='row d-flex justify-content-center'>
+        <img className='col-md-5 py-3 mt-2' src="src\assets\BasicSupDemEconChart.png" alt='basic supply and demand econ chart'/>
+        <p className='col-11 pt-5'>
+          Supply (blue) and demand (red) are the basis of our economic understanding. They hold a symbiotic relationship in determining
+          the value of any product, good, or service. Where there is less supply of something, the price is higher. Where 
+          there is low demand for something and high supply, the price is lower. The ethics of high supply and high price will however
+          be left to those who sell the product, good, or service. This naturally leaves room for corruption in determining prices especially
+          when dealing with a an abundant and societally dependant resource such as oil. However, current projections made by The 
+          Millenium Alliance for Humanity and the Biosphere organized by Standford University approximate earth's oil supplies running 
+          dry by the year 2052. Continued reliance on fossil fuels could drive the price of everything up as the supply dwindles.
+        </p>
+      </div> 
+      <div className='row d-flex justify-content-end'>
+        <p className='col-11 pt-5'>
+          Lorem ipsum the above data suggests
         </p>
       </div>
       <Link to={'/sources'}><button>See Sources</button></Link>
