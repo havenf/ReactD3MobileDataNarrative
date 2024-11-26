@@ -1,13 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { observer } from "mobx-react-lite";
 import { Link } from "react-router-dom";
 
 
 function HomePage() {
-
-  useEffect(() => {
-  
-  }, [])
   return (
     <section className="home-page container">
         <div className="row me-3">
@@ -47,26 +43,24 @@ function HomePage() {
               material composition on earth to the ice core's material composition.  <br /><br />
             </p>
            
-            <img src="src\assets\chart-line-solid.svg" id="fa-icon-home" className="col-md-4"/>
-            <p className="col-md-6 pt-5">
-              <b>3)</b> Models used in glacialogy to predict ice-sheet flow have been utilized to understand the layering of ice and 
-              its age. Inverse Monte Carlo sampling (statistical mechanics) assists in simulations designed to determine 
-              ice-flow age by layer. <br /><br />
-            </p>
-            
-        
-
             <img src="src\assets\cloud-solid.svg" id="fa-icon-home" className="col-md-4"/>
             <p className="col-md-6 pt-5">
               <b>2)</b> Comparing the ice core data with known athmospheric composition chronology stored in calcite deposits from Devil's 
               Hole in Nevada. This location is another paleoclimactic time capsule. <br /><br />
             </p>
+
+            <img src="src\assets\chart-line-solid.svg" id="fa-icon-home" className="col-md-4"/>
+            <p className="col-md-6 pt-5">
+              <b>3)</b> Models used in glacialogy to predict ice-sheet flow have been utilized to understand the layering of ice and 
+              its age. Inverse Monte Carlo sampling (statistical mechanics) assists in simulations designed to determine 
+              ice-flow age by layer. <br /><br />
+            </p>  
             
             <img src="src\assets\volcano-solid.svg" id="fa-icon-home" className="col-md-4"/>
             <p className="col-md-6 pt-5">
-              <b>4)</b> Special considerations of implications for events like the Younger Dryas Impact theory. A Theory suggesting
+              <b>4)</b> Special considerations of implications for events like the Younger Dryas Impact Hypothesis. A hypothesis suggesting
               around 12,900 years ago a massive asteroid made impact with earth causing megafauna extinction. Simulataneously 
-              this theoretical event left a fingerprint of specific materials in the air potentially recorded in the ice cores. <br /><br />
+              this theoretical event could have left a fingerprint of specific materials in the air recorded in the ice cores. <br /><br />
             </p>
             
         </div>

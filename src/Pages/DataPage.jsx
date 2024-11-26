@@ -10,7 +10,7 @@ function DataPage() {
 
   useEffect(() => {
     // Set the margins of the graph
-    const margin = { top: 10, right: 100, bottom: 100, left: 35 };
+    const margin = { top: 35, right: 100, bottom: 35, left: 35 };
   
     // update width and height based on window size
     function getResponsiveSize() {
@@ -88,10 +88,12 @@ function DataPage() {
         const mouseover = function () {
           Tooltip.style('opacity', 1);
           d3.selectAll('.myArea')
-            .style('opacity', 0.2);
+            .style('opacity', 0.2)
+            .style('transition', '777ms ease');
           d3.select(this)
             .style('stroke', 'white')
-            .style('opacity', 1);
+            .style('opacity', 1)
+            .style('transition', '777ms ease');
         };
 
         const mousemove = function (event, d) {
@@ -141,6 +143,7 @@ function DataPage() {
         .append('svg')
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom)
+        .style('background-color', '#646cff') // Add background color here
         .append('g')
         .attr('transform', `translate(${width / 2 + margin.left},${height / 2 + margin.top})`);
 
@@ -153,7 +156,7 @@ function DataPage() {
           .domain(data.map(d => d.Year));
 
         const y = d3.scaleRadial()
-          .range([window.innerWidth / 1000, Math.min(width, height) / 2])
+          .range([window.innerWidth / 1000, Math.min(width, height) / 2.1])
           .domain([0, 600]); // Adjust based on your data range
 
         // Create Tooltip
@@ -172,10 +175,12 @@ function DataPage() {
         const mouseover = function () {
           Tooltip.style('opacity', 1);
           d3.selectAll('.radialBar')
-            .style('opacity', 0.2); // Dim all other bars
+            .style('opacity', 0.2) // Dim all other bars
+            .style('transition', '777ms ease');
           d3.select(this)
             .style('stroke', 'white')
-            .style('opacity', 1); // Highlight the hovered bar
+            .style('opacity', 1) // Highlight the hovered bar
+            .style('transition', '777ms ease');
         };
 
         const mousemove = function (event, d) {
@@ -199,14 +204,14 @@ function DataPage() {
           .enter()
           .append("path")
           .attr("class", "radialBar") // Add class for reference
-          .attr("fill", "#69b3a2")
+          .attr("fill", "#242424")
           .attr("d", d3.arc()
-            .innerRadius(20)
+            .innerRadius(window.innerWidth)
             .outerRadius(d => y(d['Rough Vostok Ice core Data: CO2 Athmosphereic levels in parts per million (1 x 10^-6) over thousands of years (https://tos.org/oceanography/assets/docs/17-4_alley.pdf)']))
             .startAngle(d => x(d.Year))
             .endAngle(d => x(d.Year) + x.bandwidth())
             .padAngle(0.01)
-            .padRadius(125))
+            .padRadius(20))
           .on('mouseover', mouseover)
           .on('mousemove', mousemove)
           .on('mouseleave', mouseleave);
@@ -234,6 +239,8 @@ function DataPage() {
       'https://raw.githubusercontent.com/havenf/CSV-Datasets/refs/heads/main/US%20FF%20and%20CO2%20pp10k.csv', // For the first graph (stacked area)
       'https://raw.githubusercontent.com/havenf/CSV-Datasets/refs/heads/main/Vostok%20Ice%20Core%20Data%20-%20Sheet.csv' // For the second graph (radial chart)
     ];
+
+
   
     // Initial chart update for both graphs
     updateFirstGraph(svgRef.current, datasetUrls[0]); // For the first graph (stacked area)
