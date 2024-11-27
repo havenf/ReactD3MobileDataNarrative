@@ -10,11 +10,11 @@ function DataPage() {
 
   useEffect(() => {
     // Set the margins of the graph
-    const margin = { top: 35, right: 100, bottom: 35, left: 35 };
+    const margin = { top: 35, right: 85, bottom: 35, left: 35 };
   
     // update width and height based on window size
     function getResponsiveSize() {
-      const width = window.innerWidth * 0.88 - margin.left - margin.right;
+      const width = window.innerWidth * 0.90 - margin.left - margin.right;
       const height = window.innerHeight * 0.60 - margin.top - margin.bottom;
       return { width, height };
     }
@@ -156,7 +156,7 @@ function DataPage() {
           .domain(data.map(d => d.Year));
 
         const y = d3.scaleRadial()
-          .range([window.innerWidth / 1000, Math.min(width, height) / 2.1])
+          .range([window.innerWidth / 1000, Math.min(width, height) / 1.8])
           .domain([0, 600]); // Adjust based on your data range
 
         // Create Tooltip
@@ -207,7 +207,7 @@ function DataPage() {
           .attr("fill", "#242424")
           .attr("d", d3.arc()
             .innerRadius(window.innerWidth)
-            .outerRadius(d => y(d['Rough Vostok Ice core Data: CO2 Athmosphereic levels in parts per million (1 x 10^-6) over thousands of years (https://tos.org/oceanography/assets/docs/17-4_alley.pdf)']))
+            .outerRadius(d => y(d['Rough Vostok Ice core Data: CO2 Athmosphereic levels in parts per million (1 x 10^-6) over thousands of years (https://tos.org/oceanography/assets/docs/17-4_alley.pdf)'] / 1.618))
             .startAngle(d => x(d.Year))
             .endAngle(d => x(d.Year) + x.bandwidth())
             .padAngle(0.01)
@@ -223,15 +223,58 @@ function DataPage() {
           .enter()
           .append("g")
           .attr("text-anchor", d => (x(d.Year) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start")
-          .attr("transform", d => `rotate(${(x(d.Year) + x.bandwidth() / 2) * 180 / Math.PI - 90})translate(${y(d['Rough Vostok Ice core Data: CO2 Athmosphereic levels in parts per million (1 x 10^-6) over thousands of years (https://tos.org/oceanography/assets/docs/17-4_alley.pdf)']) + 5},0)`)
+          .attr("transform", d => `rotate(${(x(d.Year) + x.bandwidth() / 2) * 180 / Math.PI - 90})translate(${y(d['Rough Vostok Ice core Data: CO2 Athmosphereic levels in parts per million (1 x 10^-6) over thousands of years (https://tos.org/oceanography/assets/docs/17-4_alley.pdf)']) - 12},0)`)
         .append("text")
           .text(d => d.Year)
           .attr("transform", d => (x(d.Year) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "rotate(180)" : "rotate(0)")
-          .style("font-size", "12px")
+          .style("font-size", "9pt")
           .style("fill", "#ffffff")
           .attr("alignment-baseline", "middle");
       });
     }
+
+    function updateEnergyUseTable(energyData) {
+      d3.csv(energyData).then(function (data) {
+        // Check the structure of the data (optional, for debugging)
+        console.log(data);
+        
+        // Clear any existing table in the #dataTable div
+        d3.select("#dataTable").selectAll("*").remove();  // This line removes the existing table, if any
+    
+        // Create the table inside the 'dataTable' div
+        const table = d3.select("#dataTable")
+            .append("table");
+    
+        // Create the header row
+        const headers = Object.keys(data[0]); // Get column headers from the first row of data
+        const thead = table.append("thead").append("tr");
+        
+        thead.selectAll("th")
+            .data(headers)
+            .enter()
+            .append("th")
+            .text(d => d);  // Set header text as column names
+    
+        // Create the body of the table
+        const tbody = table.append("tbody");
+    
+        // Add rows for each data entry
+        const rows = tbody.selectAll("tr")
+            .data(data)
+            .enter()
+            .append("tr");
+    
+        // Add cells for each row
+        rows.selectAll("td")
+            .data(row => headers.map(header => row[header]))  // Map each row to its columns
+            .enter()
+            .append("td")
+            .text(d => d);  // Set cell text as the data value
+      }).catch(function(error) {
+        console.error("Error loading the CSV file:", error);
+      });
+    }
+    
 
   
     // Dataset URLs
@@ -240,12 +283,14 @@ function DataPage() {
       'https://raw.githubusercontent.com/havenf/CSV-Datasets/refs/heads/main/Vostok%20Ice%20Core%20Data%20-%20Sheet.csv', // For the second graph (radial chart)
       'https://raw.githubusercontent.com/havenf/CSV-Datasets/refs/heads/main/Energy%20Consumption%20Data.csv'
     ];
+    
 
-
+    
   
     // Initial chart update for both graphs
     updateFirstGraph(svgRef.current, datasetUrls[0]); // For the first graph (stacked area)
     updateSecondGraph(svgRef2.current, datasetUrls[1]); // For the second graph (radial chart)
+    updateEnergyUseTable(datasetUrls[2]); //send data to table
 
   
     // Resize event listener
@@ -264,11 +309,11 @@ function DataPage() {
   }, []); // Empty dependency array to run only once when the component mounts
   
   return (
-    <section className='container-lg mx-0 px-0'>
+    <section className='mx-0 px-0'>
       <h2 className='ms-4'>Fossil Fuel and CO2 Data</h2>
       <div id="dataviz" ref={svgRef}></div>
-      <div className='row d-flex justify-content-end'>
-        <p className='col-11 pt-5'>
+      <div className='row d-flex justify-content-center'>
+        <p className='col-md-8 pt-5'>
           The data suggests a very strong correlation between human endeavors with fossil fuels and increase of
           atmospheric carbon dioxide levels. Many aspects of our infrastructure rely on these types of fuels. Our 
           current driving force on the potential disruption of earth's naturally cyclic carbon dioxide levels is brought
@@ -280,8 +325,8 @@ function DataPage() {
       </div>
       <h2 className='ms-4'>Vostok Ice Core Data</h2>
       <div id="dataviz2" ref={svgRef2}></div>
-      <div className='row d-flex justify-content-end'>
-        <p className='col-11 pt-5'>
+      <div className='row d-flex justify-content-center'>
+        <p className='col-md-8 pt-5'>
           The data in this visualization are approximate estimates to the actual recorded levels. Generally, a pattern can be drawn out
           that involves large abrupt spikes in carbon dioxide every one-hundred thousand years with gradual decrese over the same
           amount of time. Some anomalous data exists in the ice such as ash from volcanic events that disrupted earth's normal
@@ -289,10 +334,10 @@ function DataPage() {
           An absolute conclusion of what this means for the future is unknown. 
         </p>
       </div>
-      <h2 className='ms-4'>Basic Economics Regarding Energy Use</h2>
+      <h2 className='ms-4'>Basic Economics Regarding Global Energy Use</h2>
       <div className='row d-flex justify-content-center'>
-        <img className='col-md-5 py-3 mt-2' src="src\assets\BasicSupDemEconChart.png" alt='basic supply and demand econ chart'/>
-        <p className='col-11 pt-5'>
+        <img className='col-md-5 py-3 mt-3' src="src\assets\BasicSupDemEconChart.png" alt='basic supply and demand econ chart'/>
+        <p className='col-md-8 pt-5'>
           Supply (blue) and demand (red) are the basis of our economic understanding. They hold a symbiotic relationship in determining
           the value of any product, good, or service. Where there is less supply of something, the price is higher. Where 
           there is low demand for something and high supply, the price is lower. The ethics of high supply and high price will however
@@ -301,13 +346,12 @@ function DataPage() {
           Millenium Alliance for Humanity and the Biosphere organized by Standford University approximate earth's oil supplies running 
           dry by the year 2052. Continued reliance on fossil fuels could drive the price of everything up as the supply dwindles.
         </p>
-      </div> 
-      <div className='row d-flex justify-content-end'>
-        <p className='col-11 pt-5'>
+        <div id="dataTable" className='table-responsive col-md-8'></div>
+        <p className='col-md-8 pt-5'>
           Lorem ipsum the above data suggests
         </p>
-      </div>
-      <Link to={'/sources'}><button>See Sources</button></Link>
+        <Link to={'/sources'}><button>See Data Sources</button></Link>
+      </div> 
     </section>
   );
 }
