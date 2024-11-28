@@ -3,10 +3,13 @@ import * as d3 from 'd3';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+
 function DataPage() {
   const svgRef = useRef(null); // Reference to the SVG element for the first graph
   const svgRef2 = useRef(null); // Reference to the SVG element for the second graph
+
   const [size, setSize] = useState({ width: 0, height: 0 }); // State to store SVG dimensions
+
 
   useEffect(() => {
     // Set the margins of the graph
@@ -234,6 +237,7 @@ function DataPage() {
     }
 
     function updateEnergyUseTable(energyData) {
+
       d3.csv(energyData).then(function (data) {
         // Check the structure of the data (optional, for debugging)
         console.log(data);
@@ -310,7 +314,7 @@ function DataPage() {
   
   return (
     <section className='mx-0 px-0'>
-      <h2 className='ms-4'>Fossil Fuel and CO2 Data</h2>
+      <h2 className='ms-4'>US Fossil Fuel and Global CO2 Data</h2>
       <div id="dataviz" ref={svgRef}></div>
       <div className='row d-flex justify-content-center'>
         <p className='col-md-8 pt-5'>
@@ -330,14 +334,14 @@ function DataPage() {
           The data in this visualization are approximate estimates to the actual recorded levels. Generally, a pattern can be drawn out
           that involves large abrupt spikes in carbon dioxide every one-hundred thousand years with gradual decrese over the same
           amount of time. Some anomalous data exists in the ice such as ash from volcanic events that disrupted earth's normal
-          atmospheric composition. The conclusion that our emissions are the cause of the current higher than average levels could be true.
+          atmospheric composition. The conclusion that our emissions are the cause of the current higher than average levels is likely true.
           An absolute conclusion of what this means for the future is unknown. 
         </p>
       </div>
       <h2 className='ms-4'>Basic Economics Regarding Global Energy Use</h2>
       <div className='row d-flex justify-content-center'>
         <img className='col-md-5 py-3 mt-3' src="src\assets\BasicSupDemEconChart.png" alt='basic supply and demand econ chart'/>
-        <p className='col-md-8 pt-5'>
+        <p className='col-md-6 pt-5'>
           Supply (blue) and demand (red) are the basis of our economic understanding. They hold a symbiotic relationship in determining
           the value of any product, good, or service. Where there is less supply of something, the price is higher. Where 
           there is low demand for something and high supply, the price is lower. The ethics of high supply and high price will however
@@ -345,11 +349,14 @@ function DataPage() {
           when dealing with a an abundant and societally dependant resource such as oil. However, current projections made by The 
           Millenium Alliance for Humanity and the Biosphere organized by Standford University approximate earth's oil supplies running 
           dry by the year 2052. Continued reliance on fossil fuels could drive the price of everything up as the supply dwindles.
+          <br /><br /><br />
+          This leaves much room for the necessary innovations leading to more sustainable energy sources with less carbon emissions. The amount of 
+          energy consumption in the form of fossil fuels has increased to over double to the global terrawatt per hour amount since the 
+          year 1965. Collectively we have an energy crisis. As global goernance is aware of these trifling issues, the call to innovate
+          has been initiated. Some examples of these calls include the UN Paris agreement and the energy security and climate change 
+          initiatives taken on through The US Inflation Reduction Act.
         </p>
-        <div id="dataTable" className='table-responsive col-md-8'></div>
-        <p className='col-md-8 pt-5'>
-          Lorem ipsum the above data suggests
-        </p>
+        <div id="dataTable" className='table-responsive col-md-10 py-3 mt-3'></div>
         <Link to={'/sources'}><button>See Data Sources</button></Link>
       </div> 
     </section>
