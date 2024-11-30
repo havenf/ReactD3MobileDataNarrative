@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import * as d3 from 'd3';
 
 export function Filter(){
-    
+
     const [filters, setFilters] = useState({
         year: "",
         energySource: "" // New filter for energy source
@@ -100,29 +100,33 @@ export function Filter(){
       };
 
     return (
-        <div className="filters col-md-10">
-        <label>
-        Filter by Year:&nbsp;
-        <input
-            type="text"
-            name="year"
-            value={filters.year}
-            onChange={handleFilterChange}
-        />
-        </label>
-        <label>
-        Filter by Energy Source:&nbsp;
-        <select
-        name="energySource"
-        value={filters.energySource}
-        onChange={handleFilterChange}
-        >
-        <option value="">Select an energy source</option>
-        <option value="Oil (TWh direct energy)">Oil</option>
-        <option value="Gas (TWh direct energy)">Gas</option>
-        <option value="Coal (TWh direct energy)">Coal</option>
-        </select>
-    </label>
+    <div className="filters col-md-10 pt-5 mt-5">
+        <h3 className="row">Global Energy Use</h3>
+        <div className="row">
+            <label className="col-md-6">
+                Filter by Year:&nbsp;
+                <input
+                    type="text"
+                    name="year"
+                    value={filters.year}
+                    onChange={handleFilterChange}
+                />
+            </label>
+            <label className="col-md-6">
+                Filter by Energy Source:&nbsp;
+                <select
+                name="energySource"
+                value={filters.energySource}
+                onChange={handleFilterChange}
+                >
+                <option value="">Select an energy source</option>
+                <option value="Oil (TWh direct energy)">Oil</option>
+                <option value="Gas (TWh direct energy)">Gas</option>
+                <option value="Coal (TWh direct energy)">Coal</option>
+                </select>
+            </label>
+        </div>
+        
     </div>
     )  
 }
