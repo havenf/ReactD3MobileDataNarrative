@@ -2,7 +2,6 @@
   "name": "reactapp",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://havenf.github.io/ReactD3MobileDataNarrative/",
   "type": "module",
   "scripts": {
     "dev": "vite",
