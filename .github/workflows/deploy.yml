@@ -1,0 +1,38 @@
+# .github/workflows/deploy.yml
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Trigger on push to the 'main' branch, adjust if using a different branch
+
+jobs:
+  build:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Checkout the repository code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Node.js (you can specify the version you need)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Adjust this version as needed
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Build the project using Vite
+      - name: Build project
+        run: npm run build  # Ensure 'build' is the script that builds your Vite app
+
+      # Deploy to GitHub Pages using the 'peaceiris/actions-gh-pages' action
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist  # This is the default build output directory for Vite
