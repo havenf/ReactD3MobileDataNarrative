@@ -5,5 +5,5 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   //Remove the line below if debugging
-  base: '/ReactD3DataNarrative/',
+  base: '/ReactD3MobileDataNarrative/',
 })
