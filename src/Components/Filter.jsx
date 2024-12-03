@@ -42,7 +42,7 @@ export function Filter(){
           tableDiv.selectAll("*").remove();  // Clear existing table
         
           if (filteredData.length === 0) {
-            tableDiv.append("p").text("No data available for the selected filters.");
+            tableDiv.append("p").text("No data for the selected filters.");
             return;
           }
         
@@ -94,15 +94,15 @@ export function Filter(){
       const handleFilterChange = (e) => {
         const { name, value } = e.target;
         setFilters((prev) => ({
-          ...prev,
+          ...prev, // Spread operator (...) copies an iterable
           [name]: value,
         }));
       };
 
     return (
     <div className="filters col-md-10 pt-5 mt-5">
-        <h3 className="row">Global Energy Use</h3>
-        <div className="row">
+        <h3 className="row mx-1">Global Energy Use</h3>
+        <div className="row mx-1">
             <label className="col-md-6">
                 Filter by Year:&nbsp;
                 <input

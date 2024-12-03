@@ -124,24 +124,30 @@
   
   #nav a::before {
     transition: 300ms;
-    height: 5px;
+    height: 0.4vh;
     content: "";
     position: absolute;
-    background-color: #8886ff;
+    background-image: linear-gradient(90deg,  #8886ff, #dfd2f7, #6764ff, #ff66cc);
     width: 0%;
     bottom: 1%;
     border-radius: 5em;
+    background-size: 200% 100%; 
+    background-position: 100% 0; 
   }
   
-  #nav a:hover::before{
+  #nav a:hover::before {
     width: 100%;
+    animation: moveGradient 5s infinite linear; 
   }
-  
-  #fa-icon-home{
+
+  #fa-icon-home {
     height: 25vh;
     margin: 3% 3%;
-    border-right: #8886ff solid 1px;
+    border-right: 0.4vh solid transparent; 
+    border-image: linear-gradient(90deg, #8886ff, #dfd2f7, #6764ff, #ff66cc) 1; 
+    animation: moveGradient 5s infinite linear; 
   }
+  
 
   #dataTable table {
     border-collapse: collapse;
@@ -192,9 +198,27 @@
   
   /*BOOTSTRAP ALTERATIONS*/
 
-  .row{
-    border-bottom: #8886ff 1px solid;
+  .row {
     padding-bottom: 1%;
+    border-bottom: 0.4vh solid transparent; 
+    border-radius: 5em;
+    border-image: linear-gradient(90deg, #8886ff, #dfd2f7, #6764ff, #ff66cc) 1; 
+    animation: moveGradient 3s infinite linear; 
   }
-
-  /*rebuild comment (needed for push)*/
+  
+  @keyframes moveGradient {
+    0% {
+      border-image-source: linear-gradient(90deg, #8886ff, #dfd2f7, #6764ff, #ff66cc);
+      border-image-slice: 1;
+    }
+    50% {
+      border-image-source: linear-gradient(90deg, #ff66cc, #6764ff, #dfd2f7, #8886ff); 
+      border-image-slice: 1;
+    }
+    100% {
+      border-image-source: linear-gradient(90deg, #8886ff, #dfd2f7, #6764ff, #ff66cc);
+      border-image-slice: 1;
+    }
+  }
+  
+  
