@@ -345,7 +345,7 @@ function DataPage() {
           the value of any product, good, or service. Where there is less supply of something, the price is higher. Where 
           there is low demand for something and high supply, the price is lower. The ethics of high supply and high price will however
           be left to those who sell the product, good, or service. This system naturally leaves room for corruption in determining prices especially
-          when dealing with a an abundant and societally dependant resource such as oil. However, current projections made by The 
+          when dealing with an abundant and societally dependant resource such as oil. However, current projections made by The 
           Millenium Alliance for Humanity and the Biosphere organized by Standford University approximate earth's oil supplies running 
           dry by the year 2052. Continued reliance on fossil fuels could drive the price of everything up as the supply dwindles.
           <br /><br /><br />
