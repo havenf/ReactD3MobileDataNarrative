@@ -313,7 +313,7 @@ function DataPage() {
   
   return (
     <section className='mx-0 px-0'>
-      <h2 className='ms-4'>US Fossil Fuel and Global CO2 Data</h2>
+      <h2 className='ms-4'>US Fossil Fuel and Global CO2 Data (1965 - 2022)</h2>
       <div id="dataviz" ref={svgRef}></div>
       <div className='row d-flex justify-content-center'>
         <p className='col-md-8 pt-5'>
@@ -339,6 +339,7 @@ function DataPage() {
       </div>
       <h2 className='ms-4'>Basic Economics Regarding Global Energy Use</h2>
       <div className='row d-flex justify-content-center'>
+      <video className="col-md-10 pt-5 pb-5 mb-3" src='src\assets\Timeline 1.mov' autoPlay={true} controls={true}></video>
         <img className='col-md-5 py-3 mt-3' src="src\assets\BasicSupDemEconChart.png" alt='basic supply and demand econ chart'/>
         <p className='col-md-6 pt-5'>
           Supply (blue) and demand (red) are the basis of our economic understanding. They hold a symbiotic relationship in determining
